@@ -4,7 +4,7 @@
 #include <iostream>
 #include <raylib.h>
 
-
+#include "funcionesSistema.hpp"
 
 int main()
 {
@@ -25,12 +25,21 @@ int main()
 
     //Variables para menu principal
 
+    Vector2 mousePoint = {0.0f, 0.0f};
+
+    int botonHover = 0;
+
     const char* introduccion = "Bienvenido, que quiere estudiar hoy?";
 
-    // Rectangulos
+    
+
     Vector2 posicionBienvenida;
     posicionBienvenida.x = 10.0f;
     posicionBienvenida.y = 50.0f - MeasureTextEx(Verlag, introduccion, Verlag.baseSize, 1.0f).y / 2.0f;
+
+    // Rectangulos
+    
+    Rectangle boton[4];
 
     float const botonPosicionX[4] = { middleScreenWidth / 2.0f - 200.0f, middleScreenWidth * 1.5f - 200.0f,
                                   middleScreenWidth / 2.0f - 200.0f, middleScreenWidth * 1.5f - 200.0f };
@@ -40,6 +49,11 @@ int main()
 
     float const botonLargo = 400.0f;
     float const botonAncho = 200.0f;
+
+    for (int i = 0; i <= 3; i++)
+    {
+        boton[i] = { botonPosicionX[i], botonPosicionY[i], botonLargo, botonAncho };
+    }
     
     //
 
@@ -63,6 +77,29 @@ int main()
     SetTargetFPS(30);
 
     while(!WindowShouldClose()){
+
+        //Logica-----------------------------------------------------------------------------
+        
+        mousePoint = GetMousePosition();
+
+        for (int i = 0; i <= 3; i++)
+        {
+            if (CheckCollisionPointRec(mousePoint, boton[i])) {
+                botonHover = i;
+                break;
+            }
+            else {
+                botonHover = -1;
+            }
+        }
+        
+        if (botonHover >= 0 && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+        {
+            abrirEXES(botonHover);
+        }
+
+        //-------------------------------------------------------------------------------------
+
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
@@ -71,7 +108,12 @@ int main()
 
         for (int i = 0; i <= 3; i++)
         {
-            DrawRectangle(botonPosicionX[i], botonPosicionY[i], botonLargo, botonAncho, POLICOLOR);
+            DrawRectangleRec(boton[i], POLICOLOR);
+        }
+
+        if (botonHover >= 0)
+        {
+            DrawRectangleRec(boton[botonHover], Fade(WHITE, 0.6f));
         }
 
         //DrawText("Congrats! You created your first window!", middleScreenWidth, middleScreenHeight, 20, LIGHTGRAY);
