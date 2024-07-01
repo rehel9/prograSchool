@@ -1,7 +1,7 @@
 #include <windows.h>
 #include "funcionesSistema.hpp"
 
-const char* archivoEXE[3] = { "ejemplo.exe", "ifSwitch.exe", "ejemplo2.exe" };
+const char* archivoEXE[3] = { "fundamentos.exe", "ifSwitch.exe", "for.exe" };
 
 void abrirEXES(int archivo) {
 	system(archivoEXE[archivo]);
